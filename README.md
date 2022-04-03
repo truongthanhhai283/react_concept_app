@@ -11,3 +11,6 @@
 
         - Console hasura graphql
             https://react-todos-list-db.herokuapp.com/console/data/manage
+
+#   2. Building CRUD app with Apollo react hooks
+        - npm install apollo-boost @apollo/react-hooks graphql
