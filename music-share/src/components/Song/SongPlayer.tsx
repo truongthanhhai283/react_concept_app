@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import {
   Card,
   CardContent,
@@ -8,9 +8,12 @@ import {
   Slider,
   Typography,
 } from "@material-ui/core";
-import { PlayArrow, SkipNext, SkipPrevious } from "@material-ui/icons";
+import { Pause, PlayArrow, SkipNext, SkipPrevious } from "@material-ui/icons";
+import { useQuery } from "@apollo/react-hooks";
 
+import { GET_QUEUE_SONG } from "graphql/queries";
 import QueueSong from "./QueueSong";
+import { SongContext } from "App";
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -41,7 +44,16 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const SongPlay = () => {
+  const { data } = useQuery(GET_QUEUE_SONG);
+  const { state, dispatch } = useContext(SongContext);
   const classes = useStyles();
+
+  const handleTogglePlay = () => {
+    dispatch(state?.isPlaying ? { type: "PAUSE_SONG" } : { type: "PLAY_SONG" });
+  };
+
+  console.log("data",data);
+  
 
   return (
     <>
@@ -49,11 +61,11 @@ const SongPlay = () => {
         <div className={classes.details}>
           <CardContent className={classes.content}>
             <Typography variant="h5" component="h3">
-              Title
+              {state?.song?.title}
             </Typography>
 
             <Typography variant="subtitle1" component="p" color="textSecondary">
-              Artist
+              {state?.song?.artist}
             </Typography>
           </CardContent>
 
@@ -62,8 +74,12 @@ const SongPlay = () => {
               <SkipPrevious />
             </IconButton>
 
-            <IconButton>
-              <PlayArrow className={classes.playIcon} />
+            <IconButton onClick={handleTogglePlay}>
+              {state?.isPlaying ? (
+                <Pause className={classes.playIcon} />
+              ) : (
+                <PlayArrow className={classes.playIcon} />
+              )}
             </IconButton>
 
             <IconButton>
@@ -78,11 +94,11 @@ const SongPlay = () => {
           <Slider />
         </div>
         <CardMedia
-          image="https://bestlifeonline.com/wp-content/uploads/sites/3/2019/03/Earbuds-against-heart-background.jpg"
+          image={state?.song?.thumbnail}
           className={classes.thumbnail}
         />
       </Card>
-      <QueueSong />
+      <QueueSong queueList={data?.queue} />
     </>
   );
 };
