@@ -1,4 +1,4 @@
-import React from "react";
+import React, { FC } from "react";
 import {
   Avatar,
   IconButton,
@@ -7,7 +7,9 @@ import {
   useMediaQuery,
 } from "@material-ui/core";
 import { Delete } from "@material-ui/icons";
+import { useMutation } from "@apollo/react-hooks";
 
+import { ADD_OR_REMOVE_QUEUE } from "graphql/mutation";
 const useStyles = makeStyles((theme) => ({
   avatar: {
     width: 44,
@@ -31,17 +33,14 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const QueueSong = () => {
+type Props = {
+  queueList?: any;
+};
+
+const QueueSong: FC<Props> = ({ queueList }) => {
   const getterThanMd = useMediaQuery((theme: any) =>
     theme.breakpoints.up("md")
   );
-
-  const song = {
-    title: "Love",
-    artist: "Moon",
-    thumbnail:
-      "https://bestlifeonline.com/wp-content/uploads/sites/3/2019/03/Earbuds-against-heart-background.jpg",
-  };
 
   return (
     <>
@@ -52,9 +51,9 @@ const QueueSong = () => {
           }}
         >
           <Typography color="textSecondary" variant="button">
-            QUEUE (5)
+            QUEUE ({queueList?.length})
           </Typography>
-          {Array.from({ length: 5 }, () => song).map((song, index) => (
+          {queueList?.map((song, index) => (
             <QueueSongList key={index} song={song} />
           ))}
         </div>
@@ -66,6 +65,23 @@ const QueueSong = () => {
 const QueueSongList = ({ song }: any) => {
   const classes = useStyles();
   const { title, thumbnail, artist } = song;
+  const [addOrRemoveFromQueue] = useMutation(ADD_OR_REMOVE_QUEUE, {
+    onCompleted: (data) => {
+      localStorage.setItem("queue", JSON.stringify(data.addOrRemoveFromQueue));
+    },
+  });
+
+  const handleAddOrRemoveToQueue = () => {
+    addOrRemoveFromQueue({
+      variables: {
+        input: {
+          ...song,
+          __typename: "Song", //type Song in typedefs in client.js
+        },
+      },
+    });
+  };
+
   return (
     <div className={classes.container}>
       <Avatar src={thumbnail} alt={title} className={classes.avatar} />
@@ -82,7 +98,7 @@ const QueueSongList = ({ song }: any) => {
           {artist}
         </Typography>
       </div>
-      <IconButton>
+      <IconButton onClick={handleAddOrRemoveToQueue}>
         <Delete color="error" />
       </IconButton>
     </div>
