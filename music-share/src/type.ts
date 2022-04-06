@@ -1,5 +1,6 @@
 export type SongType = {
-    title: "string",
-    thumbnail: "string",
-    artist: "string"
+    id: string,
+    title: string,
+    artist: string,
+    thumbnail: string,
 }
