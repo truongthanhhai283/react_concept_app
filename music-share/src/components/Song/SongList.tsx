@@ -9,9 +9,11 @@ import {
   IconButton,
   makeStyles,
 } from "@material-ui/core";
+import { useSubscription } from "@apollo/react-hooks";
 
 import { SongType } from "../../type";
 import { PlayArrow, Save } from "@material-ui/icons";
+import { GET_SONGS } from "../../graphql/subscription";
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -34,14 +36,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const SongList = () => {
-  let loading = false;
-
-  const song = {
-    title: "Love",
-    artist: "Moon",
-    thumbnail:
-      "https://bestlifeonline.com/wp-content/uploads/sites/3/2019/03/Earbuds-against-heart-background.jpg",
-  };
+  const { data, loading, error } = useSubscription(GET_SONGS);
 
   if (loading)
     return (
@@ -56,10 +51,14 @@ const SongList = () => {
         <CircularProgress />
       </div>
     );
+
+  if (error) {
+    return <div>Error fetching list...</div>;
+  }
   return (
     <div>
-      {Array.from({ length: 10 }, () => song).map((song, index) => (
-        <Song key={index} song={song} />
+      {data?.table_songs?.map((song: SongType) => (
+        <Song key={song.id} song={song} />
       ))}
     </div>
   );

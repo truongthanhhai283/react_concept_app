@@ -12,7 +12,12 @@
         - Console hasura graphql
             https://react-todos-list-db.herokuapp.com/console/data/manage
 
+        - HASURA_GRAPHQL_ADMIN_SCRET
+
+        - https://react-music-sharing-app.herokuapp.com/console/api/api-explorer
 #   2. Building CRUD app with Apollo react hooks
         - npm install apollo-boost @apollo/react-hooks graphql
 
         - tachyons.io
+
+        -  npm i apollo-link-ws subscriptions-transport-ws apollo-cache-inmemory apollo-client
