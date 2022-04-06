@@ -45,7 +45,7 @@ function App() {
                   width: "100%",
                   right: "0",
                   top: "70",
-                  paddingTop: 80,
+                  paddingTop: 90,
                 }
               : {
                   position: "fixed",

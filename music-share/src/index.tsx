@@ -1,16 +1,20 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import { CssBaseline, MuiThemeProvider } from "@material-ui/core";
+import { ApolloProvider } from "@apollo/react-hooks";
 
 import App from "./App";
+import client from "./graphql/client";
 import reportWebVitals from "./reportWebVitals";
 import theme from "./theme";
 
 ReactDOM.render(
-  <MuiThemeProvider theme={theme}>
-    <CssBaseline />
-    <App />
-  </MuiThemeProvider>,
+  <ApolloProvider client={client as any}>
+    <MuiThemeProvider theme={theme}>
+      <CssBaseline />
+      <App />
+    </MuiThemeProvider>
+  </ApolloProvider>,
   document.getElementById("root")
 );
 
