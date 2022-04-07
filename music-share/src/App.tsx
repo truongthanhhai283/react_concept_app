@@ -10,13 +10,13 @@ import { ActionType, ISong } from "type";
 
 export const initialState: ISong = {
   song: {
-    id: "a8e12b42-4065-4597-93de-52bd12889f98",
+    id: "",
     title:
-      "Bài Hát Của Mưa - Mưa Của Ngày Xưa | Acoustic Buồn Nhất | 20 Bản Nhạc Nhẹ Nhàng Cho Những Ngày Mưa",
-    artist: "Mưa",
-    thumbnail: "http://img.youtube.com/vi/da5SGiUgyD8/0.jpg",
-    url: "https://www.youtube.com/watch?v=da5SGiUgyD8",
-    duration: 5692,
+      "",
+    artist: "",
+    thumbnail: "",
+    url: "",
+    duration: 0,
   },
   isPlaying: false,
 };
