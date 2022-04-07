@@ -10,6 +10,7 @@ import {
   makeStyles,
 } from "@material-ui/core";
 import { useSubscription, useMutation } from "@apollo/react-hooks";
+import Marquee from "react-fast-marquee";
 
 import { SongType } from "../../type";
 import { Pause, PlayArrow, Save } from "@material-ui/icons";
@@ -34,6 +35,12 @@ const useStyles = makeStyles((theme) => ({
     objectFit: "cover",
     width: 140,
     height: 140,
+  },
+  textWhiteSpace: {
+    width: "350px",
+    overflow: "hidden",
+    whiteSpace: "nowrap",
+    textOverflow: "ellipsis",
   },
 }));
 
@@ -104,9 +111,18 @@ const Song = ({ song }: any) => {
         <CardMedia image={thumbnail} className={classes.songThumbnail} />
         <div className={classes.songInfo}>
           <CardContent>
-            <Typography gutterBottom variant="h5" component="h2">
-              {title}
-            </Typography>
+            {currentSongPlaying ? (
+              <Marquee style={{ fontSize: "22px" }}>{title}</Marquee>
+            ) : (
+              <Typography
+                gutterBottom
+                variant="h5"
+                component="h2"
+                className={classes.textWhiteSpace}
+              >
+                {title}
+              </Typography>
+            )}
             <Typography variant="body1" component="p" color="textSecondary">
               {artist}
             </Typography>

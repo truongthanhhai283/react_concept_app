@@ -11,6 +11,8 @@ import Slider from "@material-ui/core/Slider";
 import { Pause, PlayArrow, SkipNext, SkipPrevious } from "@material-ui/icons";
 import { useQuery } from "@apollo/react-hooks";
 import ReactPlayer from "react-player";
+import { useMediaQuery } from "@material-ui/core";
+import Marquee from "react-fast-marquee";
 
 import { GET_QUEUE_SONG } from "graphql/queries";
 import QueueSong from "./QueueSong";
@@ -42,6 +44,15 @@ const useStyles = makeStyles((theme) => ({
   thumbnail: {
     width: 150,
   },
+  textWhiteSpace: {
+    width: '350px',
+    overflow: 'hidden',
+    whiteSpace: 'nowrap',
+    textOverflow: 'ellipsis',
+  },
+  textDuration: {
+    marginLeft: '20px'
+  }
 }));
 
 const SongPlay = () => {
@@ -53,6 +64,10 @@ const SongPlay = () => {
   const [playedSeconds, setPlayedSeconds] = useState(0);
   const [positionInQueue, setPositionInQueue] = useState(0);
   const reactPlayerRef = useRef();
+
+  const getterToSm = useMediaQuery((theme) =>
+    theme.breakpoints.down("sm")
+  );
 
   useEffect(() => {
     const songIndex = data?.queue.findIndex(song => song?.id === state?.song?.id)
@@ -87,7 +102,7 @@ const SongPlay = () => {
 
   const handlePlayPrevSong = () => {
     const prevSong = data.queue[positionInQueue - 1]
-    
+
     if (prevSong) {
       dispatch({ type: "SET_SONG", payload: { song: prevSong } })
     }
@@ -107,18 +122,26 @@ const SongPlay = () => {
   return (
     <>
       <Card variant="outlined" className={classes.container}>
-        <div className={classes.details}>
-          <CardContent className={classes.content}>
-            <Typography variant="h5" component="h3">
-              {state?.song?.title}
-            </Typography>
+        <div className={classes.details} style={{ width: getterToSm && '100%' }}>
+          <CardContent className={classes.content} style={{ textAlign: getterToSm && "center" }}>
+            {getterToSm ? (
+              <Marquee style={{ fontSize: '22px' }}>
+                {state?.song?.title}
+              </Marquee>
+            ) : (
+              <Typography variant="h5" component="h3" className={classes.textWhiteSpace}>
+                {state?.song?.title}
+              </Typography>
+            )}
 
-            <Typography variant="subtitle1" component="p" color="textSecondary">
+            <Typography variant="subtitle1" component="p" color="textSecondary" style={{
+              display: getterToSm && "none",
+            }}>
               {state?.song?.artist}
             </Typography>
           </CardContent>
 
-          <div className={classes.controls}>
+          <div className={classes.controls} style={{ textAlign: getterToSm && "center", justifyContent: getterToSm && "space-evenly" }}>
             <IconButton onClick={handlePlayPrevSong}>
               <SkipPrevious />
             </IconButton>
@@ -135,7 +158,7 @@ const SongPlay = () => {
               <SkipNext />
             </IconButton>
 
-            <Typography variant="subtitle1" component="p" color="textSecondary">
+            <Typography variant="subtitle1" component="p" color="textSecondary" className={classes.textDuration}>
               {formatDuration(playedSeconds)}
             </Typography>
           </div>
@@ -164,9 +187,13 @@ const SongPlay = () => {
           playing={state.isPlaying}
           hidden
         />
+
         <CardMedia
           image={state?.song?.thumbnail}
           className={classes.thumbnail}
+          style={{
+            display: getterToSm && "none"
+          }}
         />
       </Card>
       <QueueSong queueList={data?.queue} />
