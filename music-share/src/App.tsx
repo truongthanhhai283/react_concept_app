@@ -40,6 +40,7 @@ function App() {
     theme.breakpoints.up("md")
   );
 
+
   return (
     <SongContext.Provider value={{ state, dispatch }}>
       <Hidden only="xs">
