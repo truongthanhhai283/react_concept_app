@@ -49,6 +49,7 @@ const useStyles = makeStyles((theme) => ({
     overflow: 'hidden',
     whiteSpace: 'nowrap',
     textOverflow: 'ellipsis',
+    fontSize: "18px"
   },
   textDuration: {
     marginLeft: '20px'
@@ -124,8 +125,8 @@ const SongPlay = () => {
       <Card variant="outlined" className={classes.container}>
         <div className={classes.details} style={{ width: getterToSm && '100%' }}>
           <CardContent className={classes.content} style={{ textAlign: getterToSm && "center" }}>
-            {getterToSm ? (
-              <Marquee style={{ fontSize: '22px' }}>
+            {getterToSm && state?.isPlaying ? (
+              <Marquee style={{ fontSize: '18px' }}>
                 {state?.song?.title}
               </Marquee>
             ) : (

@@ -11,6 +11,7 @@ import {
 } from "@material-ui/core";
 import { useSubscription, useMutation } from "@apollo/react-hooks";
 import Marquee from "react-fast-marquee";
+import clsx from "clsx";
 
 import { SongType } from "../../type";
 import { Pause, PlayArrow, Save } from "@material-ui/icons";
@@ -37,10 +38,21 @@ const useStyles = makeStyles((theme) => ({
     height: 140,
   },
   textWhiteSpace: {
-    width: "350px",
+    display: "-webkit-box",
+    "-webkitLineClamp": 2,
+    "-webkitBoxOrient": "vertical",
     overflow: "hidden",
-    whiteSpace: "nowrap",
-    textOverflow: "ellipsis",
+    fontSize: "18px",
+  },
+  songContentCurrentPlaying: {
+    backgroundColor: "#e9f3f7",
+    color: "rgba(0,0,0,0.88)",
+  },
+  songPlayingColorArtist: {
+    color: "rgba(0,0,0,0.5)",
+  },
+  songPlayingColorArtistPurple: {
+    color: "#d500f9",
   },
 }));
 
@@ -107,11 +119,16 @@ const Song = ({ song }: any) => {
 
   return (
     <Card className={classes.container}>
-      <div className={classes.songInfoContainer}>
+      <div
+        className={clsx(
+          classes.songInfoContainer,
+          state?.isPlaying && classes.songContentCurrentPlaying
+        )}
+      >
         <CardMedia image={thumbnail} className={classes.songThumbnail} />
         <div className={classes.songInfo}>
           <CardContent>
-            {currentSongPlaying ? (
+            {/* {currentSongPlaying ? (
               <Marquee style={{ fontSize: "22px" }}>{title}</Marquee>
             ) : (
               <Typography
@@ -120,15 +137,36 @@ const Song = ({ song }: any) => {
                 component="h2"
                 className={classes.textWhiteSpace}
               >
-                {title}
+                <Marquee style={{ fontSize: "22px" }}>{title}</Marquee>
               </Typography>
-            )}
-            <Typography variant="body1" component="p" color="textSecondary">
+            )} */}
+            <Typography
+              gutterBottom
+              variant="h5"
+              component="h2"
+              className={classes.textWhiteSpace}
+            >
+              {title}
+            </Typography>
+            <Typography
+              variant="body1"
+              component="p"
+              className={clsx(
+                state?.isPlaying && classes.songPlayingColorArtist
+              )}
+            >
               {artist}
             </Typography>
           </CardContent>
           <CardActions>
-            <IconButton size="small" color="primary" onClick={handleTogglePlay}>
+            <IconButton
+              size="small"
+              color="primary"
+              onClick={handleTogglePlay}
+              className={clsx(
+                state?.isPlaying && classes.songPlayingColorArtist
+              )}
+            >
               {currentSongPlaying ? <Pause /> : <PlayArrow />}
             </IconButton>
 
@@ -137,7 +175,13 @@ const Song = ({ song }: any) => {
               color="secondary"
               onClick={handleAddOrRemoveToQueue}
             >
-              <Save color="secondary" />
+              <Save
+                className={clsx(
+                  state?.isPlaying
+                    ? classes.songPlayingColorArtist
+                    : classes.songPlayingColorArtistPurple
+                )}
+              />
             </IconButton>
           </CardActions>
         </div>
