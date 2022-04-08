@@ -21,7 +21,7 @@ import { SongContext } from "App";
 const useStyles = makeStyles((theme) => ({
   container: {
     display: "flex",
-    justifyContent: "space-between",
+    justifyContent: "space-around",
   },
   details: {
     display: "flex",
@@ -36,6 +36,7 @@ const useStyles = makeStyles((theme) => ({
     alignItems: "center",
     paddingLeft: theme.spacing(1),
     paddingRight: theme.spacing(1),
+    justifyContent: 'space-between'
   },
   playIcon: {
     height: 38,
@@ -45,11 +46,11 @@ const useStyles = makeStyles((theme) => ({
     width: 150,
   },
   textWhiteSpace: {
-    width: '350px',
-    overflow: 'hidden',
-    whiteSpace: 'nowrap',
-    textOverflow: 'ellipsis',
-    fontSize: "18px"
+    display: "-webkit-box",
+    "-webkitLineClamp": 2,
+    "-webkitBoxOrient": "vertical",
+    overflow: "hidden",
+    fontSize: "18px",
   },
   textDuration: {
     marginLeft: '20px'
@@ -143,22 +144,24 @@ const SongPlay = () => {
           </CardContent>
 
           <div className={classes.controls} style={{ textAlign: getterToSm && "center", justifyContent: getterToSm && "space-evenly" }}>
-            <IconButton onClick={handlePlayPrevSong}>
-              <SkipPrevious />
-            </IconButton>
+            <div>
+              <IconButton onClick={handlePlayPrevSong}>
+                <SkipPrevious />
+              </IconButton>
 
-            <IconButton onClick={handleTogglePlay}>
-              {state?.isPlaying ? (
-                <Pause className={classes.playIcon} />
-              ) : (
-                <PlayArrow className={classes.playIcon} />
-              )}
-            </IconButton>
+              <IconButton onClick={handleTogglePlay}>
+                {state?.isPlaying ? (
+                  <Pause className={classes.playIcon} />
+                ) : (
+                  <PlayArrow className={classes.playIcon} />
+                )}
+              </IconButton>
 
-            <IconButton onClick={handlePlayNextSong}>
-              <SkipNext />
-            </IconButton>
+              <IconButton onClick={handlePlayNextSong}>
+                <SkipNext />
+              </IconButton>
 
+            </div>
             <Typography variant="subtitle1" component="p" color="textSecondary" className={classes.textDuration}>
               {formatDuration(playedSeconds)}
             </Typography>
