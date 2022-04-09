@@ -11,8 +11,7 @@ import { ActionType, ISong } from "type";
 export const initialState: ISong = {
   song: {
     id: "",
-    title:
-      "",
+    title: "",
     artist: "",
     thumbnail: "",
     url: "",
@@ -34,6 +33,10 @@ function App() {
 
   const getterThanSm = useMediaQuery((theme: any) =>
     theme.breakpoints.up("sm")
+  );
+
+  const getterDownSm = useMediaQuery((theme: any) =>
+    theme.breakpoints.down("sm")
   );
 
   const getterThanMd = useMediaQuery((theme: any) =>
@@ -81,7 +84,11 @@ function App() {
                 }
           }
         >
-          <SongPlayer />
+          {getterThanMd ? (
+            <SongPlayer />
+          ) : (
+            getterDownSm && state?.isPlaying && <SongPlayer />
+          )}
         </Grid>
       </Grid>
     </SongContext.Provider>
